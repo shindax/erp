@@ -1,13 +1,17 @@
 <?php
 namespace App\Controller;
 
+use App\Domain\Service\FormatService;
 use App\Domain\Service\GreeterService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
 class WorldController extends AbstractController
 {
-    public function __construct( private readonly GreeterService $greeterService )
+    public function __construct(
+                                    private readonly FormatService $formatService,
+                                    private readonly GreeterService $greeterService
+                                )
     {
 
     }
@@ -15,6 +19,7 @@ class WorldController extends AbstractController
 //    #[Route('/hello', name: 'hello_world')]
     public function hello(): Response
     {
-        return new Response("<html><body>{$this->greeterService->greet('world')}</body></html>");
+        $result = $this -> formatService -> format( $this -> greeterService -> greet( "world"));
+        return new Response("<html><body>$result</body></html>");
     }
 }

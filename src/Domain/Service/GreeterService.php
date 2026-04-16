@@ -12,6 +12,6 @@ class GreeterService
 
     public function greet( string $name ): string
     {
-        return "<b>{$this->greet}</b>, <i>$name</i>!";
+        return "{$this->greet}, $name!";
     }
 }
