@@ -19,16 +19,48 @@ services:
     App\:
         resource: '../src/'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
-
     App\Controller\WorldController:
         arguments:
-            $formatService: '@ strong_formatter'
+            $formatService: '@list_formatter'
 
     App\Domain\Service\GreeterService:
         arguments:
             - 'Hello'
+
+
+    hello_greeter:
+        class: App\Domain\Service\GreeterService
+        arguments:
+            $greet: 'Hello'
+        tags:
+          - { name: 'app.greeter_service', priority: 3 }
+
+    greeting_greeter:
+        class: App\Domain\Service\GreeterService
+        arguments:
+            $greet: 'Greetings'
+        tags:
+            - { name: 'app.greeter_service', priority: 2 }
+
+    hi_greeter:
+        class: App\Domain\Service\GreeterService
+        arguments:
+            $greet: 'Hi'
+        tags:
+            - { name: 'app.greeter_service', priority: 1 }
+
+############################
+
+    list_formatter:
+        class: App\Domain\Service\FormatService
+        calls:
+            - [ setTag, ['ol']]
+
+    list_item_formatter:
+        class: App\Domain\Service\FormatService
+        calls:
+            - [ setTag, ['li']]
+        tags: [ 'app.formatter_service']
 
     strong_formatter:
         class: App\Domain\Service\FormatService
@@ -42,3 +74,5 @@ services:
         class: App\Domain\Service\FormatService
         factory: [ '@App\Domain\Service\FormatServiceFactory', 'headerFormatService' ]
         arguments: [ 1 ]
+
+############################
